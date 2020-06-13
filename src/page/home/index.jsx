@@ -6,49 +6,31 @@ import { Modal } from '@@'
 
 const { Header, Content, Footer, Sider } = Layout
 
-const columns = [
-  {
-    title: 'ID',
-    dataIndex: 'uid',
-  },
-  {
-    title: '用户名',
-    dataIndex: 'username',
-  },
-  {
-    title: '密码',
-    dataIndex: 'password',
-  },
-  {
-    title: '权限',
-    dataIndex: 'roleid',
-  },
-  {
-    title: '状态',
-    dataIndex: 'status',
-  },
-  {
-    title: '操作',
-    render: item => {
-      return (
-        <span>
-          <Button onClick={()=>console.log(item)}>修改</Button>
-          <Button>删除</Button>
-        </span>
-      )
-    }
-  }
-];
-
 function Home (props) {
+  let [ visible, setVisible ] = useState(false)
+  let [ users, setUsers ] = useState({})
   let [select, setSelect] = useState([])
   const { data } = props
   useEffect(() => {
-
+    
   }, [])
 
+  const handleOk = e => {
+    console.log(e);
+    setVisible(false)
+  }
+
+  const handleCancel = e => {
+    setVisible(false)
+  }
+
+  const upd = item => {
+    setUsers(item)
+    setVisible(true)
+  }
+
   const onSelectChange = selectedRowKeys => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
+    console.log('selectedRowKeys changed: ', selectedRowKeys)
     setSelect(selectedRowKeys)
   };
 
@@ -69,7 +51,7 @@ function Home (props) {
               return false;
             }
             return true;
-          });
+          })
           setSelect(newSelectedRowKeys) 
         },
       },
@@ -83,16 +65,55 @@ function Home (props) {
               return true;
             }
             return false;
-          });
+          })
           setSelect(newSelectedRowKeys)
         },
       },
     ],
-  };
+  }
+
+  const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'uid',
+    },
+    {
+      title: '用户名',
+      dataIndex: 'username',
+    },
+    {
+      title: '密码',
+      dataIndex: 'password',
+    },
+    {
+      title: '权限',
+      dataIndex: 'roleid',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+    },
+    {
+      title: '操作',
+      render: item => {
+        return (
+          <span>
+            <Button onClick={() => upd(item)}>修改</Button>
+            <Button>删除</Button>
+          </span>
+        )
+      }
+    }
+  ]
 
   return (
     <div className="home-box">
-      <Modal/>
+      <Modal 
+        users={users}
+        visible={visible} 
+        handleOk={handleOk} 
+        handleCancel={handleCancel} 
+      />
       <Layout>
         <Sider
           breakpoint="lg"
@@ -100,9 +121,7 @@ function Home (props) {
           onBreakpoint={broken => {
             console.log(broken);
           }}
-          onCollapse={(collapsed, type) => {
-            console.log(collapsed, type);
-          }}
+          onCollapse={(collapsed, type) => {}}
         >
           <div className="logo" />
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
